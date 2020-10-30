@@ -1,0 +1,22 @@
+name: ChatController
+version: ${project.version}
+main: me.pljr.chatcontroller.ChatController
+api-version: 1.13
+depend: [PLJRApi]
+authors: [9hx]
+description: Plugin for handling in-game chat.
+commands:
+  chatcontroller:
+    description: Information about ChatController.
+  msg:
+    description: Command for private messaging.
+  msgignore:
+    description: Command for ignorint private messaging for players.
+  achatcontroller:
+    description: Admin information about ChatController.
+  achat:
+    description: Command to use admin chat.
+  amsg:
+    description: Admin command for private messaging.
+  bc:
+    description: Command for broadcasting messages.

@@ -1,0 +1,200 @@
+# Big thanks and love for using my plugins! ^^
+
+#|--------------------------------------------------------------------------------------------------------------------|#
+# Plugin: ChatController
+# Author: https://www.mc-market.org/members/89497/
+# Description: Plugin to handle in-game chat.
+# Dependencies:
+#   -> MySQL Database
+#   -> PLJRApi
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+###############\
+# MySQL Setup ##############################################################################################\
+############### This is the most important part, as the plugin can not work without proper MySQL Database. # \
+              ##############################################################################################  \
+mysql:
+  enabled: false #-> Should we use this database instead of the one configured in PLJRApi config.yml?
+  host: "127.0.0.1"
+  port: "3306"
+  database: "db"
+  username: "root"
+  password: ""
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+##################\
+# Settings Setup #############################################################\
+################## Here, you can enable or disable functions of this plugin. # \
+                 #############################################################  \
+settings:
+  bungee: false # Should we use bungee functions?
+  admin-chat: "#" # What should we look for, when trying to send AdminChat message?
+  sounds: true # Should we use sounds?
+  broadcast: 600 # How often should broadcasts happen?
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+##################\
+# Mention Setup #################################################################\
+################# Here, you can customize, what should happen after mentioning. # \
+                #################################################################  \
+mention:
+  message:
+    enabled: true
+    text:
+      - "§e%player §amentioned you!"
+  title:
+    enabled: true
+    title: "§a§lMention!"
+    subtitle: "§e%player §bmentioned you in chat!"
+    in: 10
+    stay: 40
+    out: 10
+  actionbar:
+    enabled: true
+    message: "§e%player §amentioned you!"
+    duration: 40
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+################\
+# Sounds Setup #######################################################\
+################ Here, you can customize sounds, made by the plugin. # \
+               #######################################################  \
+sounds:
+  MENTION: "LEVEL_UP"
+  PRIVATE_MESSAGE: "LEVEL_UP"
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+##############\
+# Lang Setup ################################################################\
+############## Here, you can customize messages, send by the plugin itself. # \
+             ################################################################  \
+private-message-sender:
+  - ""
+  - "&7✉ &b%sender &8&l> &b%receiver"
+  - ""
+  - "&8&l■ &f%message"
+  - ""
+
+private-message-receiver:
+  - ""
+  - "&7✉ &b%sender &8&l> &b%receiver"
+  - ""
+  - "&8&l■ &f%message"
+  - ""
+
+help:
+  - ""
+  - "§a§lChatController Help v${project.version}"
+  - ""
+  - "§e/chatcontroller help §8» §fDisplays this message."
+  - "§e/msg <player> <message> §8» §fSend private message to player."
+  - "§e/msgignore §8» §fToggles ignore mode."
+  - "§e/msgignore <player> §8» §fAdds/Removes player from ignore list."
+  - ""
+
+admin-help:
+  - ""
+  - "§a§lChatController Admin-Help v${project.version}"
+  - ""
+  - "§e/achatcontroller help §8» §fDisplays this message."
+  - "§e/achatcontroller spy §8» §fToggles spying on private messages."
+  - "§e/achat <message> §8» §fSends message to admin chat."
+  - "§e/amsg <player> <message> §8» §fSends private message to player, ignoring his ignore list."
+  - "§e/bc <message> §8» §fBroadcasts message."
+  - ""
+
+lang:
+  NO_CONSOLE: "§aChatController §8» §fThi command is for in-game use only."
+  ADMIN_CHAT_FORMAT: "§4§lAT §c%player §4> §c%message"
+  ADMIN_SPY: "§cMSG: §8%sender : %receiver > §7%message"
+  MSG_FAILURE_IGNORING: "§aChatController §8» §b%player §fis not receiving any private messages."
+  MSG_FAILURE_BLOCKED: "§aChatController §8» §b%player §fhas blocked you."
+  MSGIGNORE_SUCCESS_FULLIGNORE_ON: "§aChatController §8» §fYou are now ignoring everyone."
+  MSGIGNORE_SUCCESS_FULLIGNORE_OFF: "§aChatController §8» §fYou are no longed ignoring everyone."
+  MSGIGNORE_SUCCESS_IGNORE: "§aChatController §8» §fYou are now ignoring messages from §b%player§f."
+  MSGIGNORE_SUCCESS_UNIGNORE: "§aChatController §8» §fYou are no longer ignoring messages from §b%player§f."
+  ACHATCONTROLLER_SPY_ON: "§aChatController §8» §fYou can now see private messages."
+  ACHATCONTROLLER_SPY_OFF: "§aChatController §8» §fYou no longer can see private messages."
+  MESSAGE_JOIN_FIRST: "§a%player §fhas joined for the §bfirst time§f!"
+  MESSAGE_JOIN: "&a&l● &a&o%player"
+  MESSAGE_LEAVE: "&c&l● &c&o%player"
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+################\
+# Groups Setup ############################################################\
+################ Here, you can edit and create formats of chat per group. # \
+               ############################################################  \
+groups:
+  # Permission to use: "chatcontroller.groups.<group>"
+  default: "<hover:show_text:'Click to send private message.'><click:suggest_command:'/msg %player_name% '>%vault_prefix% §f%player_name% %vault_suffix%</click></hover> §8> §7%message"
+  admin: "<hover:show_text:'Click to send private message.'><click:suggest_command:'/msg %player_name% '>%vault_prefix% §c%player_name% %vault_suffix%</click></hover> §8> §7%message"
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+####################\
+# Broadcasts Setup ####################################################\
+#################### Here, you can edit and create custom broadcasts. # \
+                   ####################################################  \
+broadcasts:
+  1:
+    perm: ""
+    sound: "CLICK"
+    message:
+      enabled: true
+      text:
+        - ""
+        - "§aBroadcast"
+        - "This broadcast can see everyone!"
+        - ""
+    title:
+      enabled: true
+      title:
+        title: "§aBroadcast"
+        subtitle: "Everyone can see this!"
+        in: 10
+        stay: 40
+        out: 10
+    actionbar:
+      enabled: true
+      actionbar:
+        message: "§aBroadcast: §fEveryone can see this!"
+        duration: 40
+  two:
+    perm: "chatcontroller.broadcast.admin"
+    sound: "CLICK"
+    message:
+      enabled: true
+      text:
+        - ""
+        - "§cBroadcast"
+        - "You have permission to see this!"
+        - ""
+    title:
+      enabled: true
+      title:
+        title: "§cBroadcast"
+        subtitle: "You have permission to see this!"
+        in: 10
+        stay: 40
+        out: 10
+    actionbar:
+      enabled: true
+      actionbar:
+        message: "§cBroadcast: §fYou have permission to see this!"
+        duration: 40
+#|--------------------------------------------------------------------------------------------------------------------|#
+
+########################\
+# Death Messages Setup ########################################################\
+######################## Here, you can edit and create custom death messages. # \
+                       ########################################################  \
+death-messages:
+  player:
+    - "&4☠ &c%attacker &7killed &c%victim§7!"
+    - "&4☠ §c%victim §7got killed by §c%victim§7!"
+  causes:
+    1:
+      type: "FALL"
+      messages:
+        - "&4☠ §c%victim §7broke his legs by falling."
+        - "&4☠ §c%victim §7slipped."
+#|--------------------------------------------------------------------------------------------------------------------|#
