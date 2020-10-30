@@ -18,10 +18,10 @@ public class AMsgCommand extends CommandUtil implements CommandExecutor {
         if (!checkPerm(sender, "chatcontroller.amsg.use")) return false;
 
         if (args.length >= 2){
-            // /msg <player> <message>
+            // /amsg <player> <message>
             if (!checkPlayer(sender, args[0])) return false;
             Player receiver = Bukkit.getPlayer(args[0]);
-            MsgUtils.sendMsg(sender, receiver, StringUtils.join(ArrayUtils.subarray(args, 1, args.length)));
+            MsgUtils.sendMsg(sender, receiver, StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " "));
             return true;
         }
 
