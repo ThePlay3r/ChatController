@@ -15,8 +15,10 @@ public class CfgDeathMessages {
         player = config.getStringList("death-messages.player");
         messages = new HashMap<>();
         ConfigurationSection cs = config.getConfigurationSection("death-messages.causes");
-        for (String cause : cs.getKeys(false)){
-            messages.put(config.getDamageCause("death-messages.causes."+cause+".type"), config.getStringList("death-messages.causes."+cause+".messages"));
+        if (cs != null){
+            for (String cause : cs.getKeys(false)){
+                messages.put(config.getDamageCause("death-messages.causes."+cause+".type"), config.getStringList("death-messages.causes."+cause+".messages"));
+            }
         }
     }
 }

@@ -45,9 +45,10 @@ public final class ChatController extends JavaPlugin {
         }
     }
 
-    private void setupConfig(){
+    public void setupConfig(){
         saveDefaultConfig();
-        configManager = new ConfigManager(getConfig(), "§cCahtController:", "config.yml");
+        reloadConfig();
+        configManager = new ConfigManager(getConfig(), "§cChatController:", "config.yml");
         CfgGroups.load(configManager);
         CfgLang.load(configManager);
         CfgMention.load(configManager);
@@ -82,13 +83,13 @@ public final class ChatController extends JavaPlugin {
     }
 
     private void setupCommands(){
-        getCommand("chatcontroller").setExecutor(new ChatControllerCommand());
-        getCommand("msg").setExecutor(new MsgCommand());
-        getCommand("msgignore").setExecutor(new MsgIgnoreCommand());
-        getCommand("achatcontroller").setExecutor(new AChatControllerCommand());
-        getCommand("achat").setExecutor(new AChatCommand());
-        getCommand("amsg").setExecutor(new AMsgCommand());
-        getCommand("bc").setExecutor(new BCCommand());
+        new ChatControllerCommand().registerCommand(this);
+        new MsgCommand().registerCommand(this);
+        new MsgIgnoreCommand().registerCommand(this);
+        new AChatControllerCommand().registerCommand(this);
+        new AChatCommand().registerCommand(this);
+        new AMsgCommand().registerCommand(this);
+        new BCCommand().registerCommand(this);
     }
 
     public static ConfigManager getConfigManager() {

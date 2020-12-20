@@ -28,14 +28,17 @@ public class AsyncPlayerChatListener implements Listener {
                 // AdminChat
                 if (message.startsWith(CfgSettings.adminChat)){
                     if (player.hasPermission("chatcontroler.adminchat.use")){
-                        ChatUtil.broadcast(PapiUtil.setPlaceholders(player, CfgLang.lang.get(Lang.ADMIN_CHAT_FORMAT).replace("%player", playerName).replace("%message", MiniMessageUtil.strip(message.substring(1)))),
+                        ChatUtil.broadcast(PapiUtil.setPlaceholders(player, CfgLang.lang.get(Lang.ADMIN_CHAT_FORMAT).replace("{player}", playerName).replace("{message}", MiniMessageUtil.strip(message.substring(1)))),
                                 "chatcontroller.adminchat.see", CfgSettings.bungee);
                         break;
                     }
                 }
 
                 // Chat
-                ChatUtil.broadcast(PapiUtil.setPlaceholders(player, CfgGroups.groups.get(group).replace("%message", MiniMessageUtil.strip(message))), "", CfgSettings.bungee);
+                ChatUtil.broadcast(PapiUtil.setPlaceholders(player,
+                        CfgGroups.groups.get(group)
+                                .replace("{player}", CfgGroups.getPlayerPlaceholder(player))
+                                .replace("{message}", MiniMessageUtil.strip(message))), "", CfgSettings.bungee);
 
                 // Mention
                 for (Player bukkitPlayer : Bukkit.getOnlinePlayers()){

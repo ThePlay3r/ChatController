@@ -2,6 +2,7 @@ package me.pljr.chatcontroller.listeners;
 
 import me.pljr.chatcontroller.config.CfgLang;
 import me.pljr.chatcontroller.enums.Lang;
+import me.pljr.pljrapi.utils.ChatUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,9 +16,11 @@ public class PlayerJoinListener implements Listener {
         String playerName = player.getName();
 
         if (!player.hasPlayedBefore()){
-            event.setJoinMessage(CfgLang.lang.get(Lang.MESSAGE_JOIN_FIRST).replace("%player", playerName));
+            event.setJoinMessage(null);
+            ChatUtil.broadcast(CfgLang.lang.get(Lang.MESSAGE_JOIN_FIRST).replace("{player}", playerName), "", false);
         }else{
-            event.setJoinMessage(CfgLang.lang.get(Lang.MESSAGE_JOIN).replace("%player", playerName));
+            event.setJoinMessage(null);
+            ChatUtil.broadcast(CfgLang.lang.get(Lang.MESSAGE_JOIN).replace("{player}", playerName), "", false);
         }
     }
 }

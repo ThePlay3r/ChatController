@@ -7,8 +7,10 @@ Spigot plugin for handling in-game chat.
 - PLJRApi: https://www.github.com/ThePlay3r/PLJRApi
 
 ## 📋 Features
-- Player and admin commands.
-- Time and Weather commands.
+- Private messages.
+- Broadcast commands.
+- Admin chat.
+- Mentions.
 - MySQL Support.
 - Huge Configuration.
 

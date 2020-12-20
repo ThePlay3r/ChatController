@@ -23,16 +23,16 @@ public class MsgUtils {
         message = MiniMessageUtil.strip(message);
         if (CfgSettings.sounds) receiver.playSound(receiver.getLocation(), CfgSounds.sounds.get(SoundType.PRIVATE_MESSAGE), 1, 1);
         for (String line : CfgLang.privateMessageSender){
-            ChatUtil.sendMessage(sender, line.replace("%sender", senderName).replace("%receiver", receiverName).replace("%message", message));
+            ChatUtil.sendMessage(sender, line.replace("{sender}", senderName).replace("{receiver}", receiverName).replace("{message}", message));
         }
         for (String line : CfgLang.privateMessageReceiver){
-            ChatUtil.sendMessage(receiver, line.replace("%sender", senderName).replace("%receiver", receiverName).replace("%message", message));
+            ChatUtil.sendMessage(receiver, line.replace("{sender}", senderName).replace("{receiver}", receiverName).replace("{message}", message));
         }
         for (Player player : Bukkit.getOnlinePlayers()){
             UUID playerId = player.getUniqueId();
             CorePlayer corePlayer = ChatController.getPlayerManager().getCorePlayer(playerId);
             if (corePlayer.isSpy()){
-                ChatUtil.sendMessage(player, CfgLang.lang.get(Lang.ADMIN_SPY).replace("%sender", senderName).replace("%receiver", receiverName).replace("%message", message));
+                ChatUtil.sendMessage(player, CfgLang.lang.get(Lang.ADMIN_SPY).replace("{sender}", senderName).replace("{receiver}", receiverName).replace("{message}", message));
             }
         }
     }

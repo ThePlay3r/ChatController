@@ -30,10 +30,10 @@ public class PlayerDeathListener implements Listener {
             String killerName = killer.getName();
 
             List<String> messages = CfgDeathMessages.player;
-            message = messages.get(new Random().nextInt(messages.size())).replace("%attacker", killerName).replace("%victim", playerName);
+            message = messages.get(new Random().nextInt(messages.size())).replace("{attacker}", killerName).replace("{victim}", playerName);
         }else if (CfgDeathMessages.messages.containsKey(cause)){
             List<String> messages = CfgDeathMessages.messages.get(cause);
-            message = messages.get(new Random().nextInt(messages.size())).replace("%victim", playerName);
+            message = messages.get(new Random().nextInt(messages.size())).replace("{victim}", playerName);
         }
 
         if (message != null){

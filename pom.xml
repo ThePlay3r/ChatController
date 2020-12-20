@@ -6,7 +6,7 @@
 
     <groupId>me.pljr</groupId>
     <artifactId>ChatController</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>ChatController</name>
@@ -74,9 +74,9 @@
         <dependency>
             <groupId>me.pljr.pljrapi</groupId>
             <artifactId>PLJRApi</artifactId>
-            <version>1.0</version>
+            <version>1.6</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libraries/PLJRApi.jar</systemPath>
+            <systemPath>${project.basedir}/libraries/PLJRApi-1.6.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

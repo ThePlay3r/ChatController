@@ -6,28 +6,40 @@ import me.pljr.pljrapi.utils.CommandUtil;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class AMsgCommand extends CommandUtil implements CommandExecutor {
+public class AMsgCommand extends CommandUtil {
+
+    public AMsgCommand(){
+        super("amsg", "chatcontroller.amsg.use");
+    }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!checkPerm(sender, "chatcontroller.amsg.use")) return false;
-
+    public void onPlayerCommand(Player player, String[] args){
         if (args.length >= 2){
             // /amsg <player> <message>
-            if (!checkPlayer(sender, args[0])) return false;
+            if (!checkPlayer(player, args[0])) return;
             Player receiver = Bukkit.getPlayer(args[0]);
-            MsgUtils.sendMsg(sender, receiver, StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " "));
-            return true;
+            MsgUtils.sendMsg(player, receiver, StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " "));
+            return;
         }
 
-        if (checkPerm(sender, "achatcontroller.help")){
-            sendHelp(sender, CfgLang.adminHelp);
+        if (checkPerm(player, "achatcontroller.help")){
+            sendHelp(player, CfgLang.adminHelp);
         }
-        return false;
+    }
+
+    @Override
+    public void onConsoleCommand(CommandSender sender, String[] args){
+        if (args.length >= 2){
+            // /amsg <player> <message>
+            if (!checkPlayer(sender, args[0])) return;
+            Player receiver = Bukkit.getPlayer(args[0]);
+            MsgUtils.sendMsg(sender, receiver, StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " "));
+            return;
+        }
+
+        sendHelp(sender, CfgLang.adminHelp);
     }
 }

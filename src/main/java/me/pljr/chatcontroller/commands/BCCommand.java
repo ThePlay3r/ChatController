@@ -6,24 +6,34 @@ import me.pljr.pljrapi.utils.ChatUtil;
 import me.pljr.pljrapi.utils.CommandUtil;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class BCCommand extends CommandUtil implements CommandExecutor {
+public class BCCommand extends CommandUtil {
+
+    public BCCommand(){
+        super("bc", "chatcontroller.bc.use");
+    }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!checkPerm(sender, "chatcontroller.bc.use")) return false;
-
+    public void onPlayerCommand(Player player, String[] args){
         if (args.length > 0){
             ChatUtil.broadcast(StringUtils.join(ArrayUtils.subarray(args, 0, args.length), " "), "", CfgSettings.bungee);
-            return true;
+            return;
         }
 
-        if (checkPerm(sender, "achatcontroller.help")){
-            sendHelp(sender, CfgLang.adminHelp);
+        if (checkPerm(player, "achatcontroller.help")){
+            sendHelp(player, CfgLang.adminHelp);
         }
-        return false;
+    }
+
+    @Override
+    public void onConsoleCommand(CommandSender sender, String[] args){
+        if (args.length > 0){
+            ChatUtil.broadcast(StringUtils.join(ArrayUtils.subarray(args, 0, args.length), " "), "", CfgSettings.bungee);
+            return;
+        }
+
+        sendHelp(sender, CfgLang.adminHelp);
     }
 }
