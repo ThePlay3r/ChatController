@@ -1,10 +1,10 @@
 package me.pljr.chatcontroller.listeners;
 
 import me.pljr.chatcontroller.ChatController;
-import me.pljr.chatcontroller.config.CfgLang;
-import me.pljr.chatcontroller.enums.Lang;
+import me.pljr.chatcontroller.config.Lang;
 import me.pljr.chatcontroller.managers.QueryManager;
-import me.pljr.pljrapi.utils.ChatUtil;
+import me.pljr.pljrapispigot.utils.ChatUtil;
+import me.pljr.pljrapispigot.utils.PapiUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,6 +24,6 @@ public class PlayerQuitListener implements Listener {
         queryManager.savePlayer(playerId);
 
         event.setQuitMessage(null);
-        ChatUtil.broadcast(CfgLang.lang.get(Lang.MESSAGE_LEAVE).replace("{player}", playerName), "", false);
+        ChatUtil.broadcast(PapiUtil.setPlaceholders(player, Lang.MESSAGE_LEAVE.get().replace("{player}", playerName)), "", false);
     }
 }

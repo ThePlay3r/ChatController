@@ -31,6 +31,9 @@ settings:
   admin-chat: "#" # What should we look for, when trying to send AdminChat message?
   sounds: true # Should we use sounds?
   broadcast: 600 # How often should broadcasts happen?
+  join-message: true # Should we send player message on join?
+  join-title: true # Should we show player title on join?
+  join-actionbar: true # Should we show player actionbar on join?
 #|--------------------------------------------------------------------------------------------------------------------|#
 
 ##################\
@@ -103,6 +106,20 @@ admin-help:
   - "§e/bc <message> §8» §fBroadcasts message."
   - ""
 
+join-message:
+  - "§8§l> §fHey §b{player}§f, welcome to server!"
+
+join-title:
+  title: "§fHey §b{player}"
+  subtitle: "§fWelcome to the server!"
+  in: 0
+  stay: 40
+  out: 20
+
+join-actionbar:
+  message: "§fHey §b{player}§f, welcome to server!"
+  duration: 40
+
 lang:
   ADMIN_CHAT_FORMAT: "§4§lAT §c{player} §4> §c{message}"
   ADMIN_SPY: "§cMSG: §8{sender} : {receiver} > §7{message}"
@@ -134,8 +151,8 @@ player: "
 
 groups:
   # Permission to use: "chatcontroller.groups.<group>"
-  default: "{player} §8> §7{message}"
   admin: "§cAdmin {player} §8> §7{message}"
+  default: "{player} §8> §7{message}"
 #|--------------------------------------------------------------------------------------------------------------------|#
 
 ####################\

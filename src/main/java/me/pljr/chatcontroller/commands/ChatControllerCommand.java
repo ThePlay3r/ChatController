@@ -1,9 +1,10 @@
 package me.pljr.chatcontroller.commands;
 
 import me.pljr.chatcontroller.ChatController;
-import me.pljr.chatcontroller.config.CfgLang;
-import me.pljr.pljrapi.utils.CommandUtil;
+import me.pljr.chatcontroller.config.Lang;
+import me.pljr.pljrapispigot.utils.CommandUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class ChatControllerCommand extends CommandUtil {
@@ -18,7 +19,7 @@ public class ChatControllerCommand extends CommandUtil {
             // /chatcontroller help
             if (args[0].equalsIgnoreCase("help")){
                 if (!checkPerm(player, "chatcontroller.help"))
-                    sendHelp(player, CfgLang.help);
+                    sendMessage(player, Lang.HELP);
                 return;
             }
 
@@ -33,11 +34,11 @@ public class ChatControllerCommand extends CommandUtil {
     }
 
     @Override
-    public void onConsoleCommand(CommandSender sender, String[] args){
+    public void onConsoleCommand(ConsoleCommandSender sender, String[] args){
         if (args.length == 1){
             // /chatcontroller help
             if (args[0].equalsIgnoreCase("help")){
-                sendHelp(sender, CfgLang.help);
+                sendMessage(sender, Lang.HELP);
                 return;
             }
 

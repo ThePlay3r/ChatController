@@ -1,8 +1,11 @@
 package me.pljr.chatcontroller.listeners;
 
-import me.pljr.chatcontroller.config.CfgLang;
-import me.pljr.chatcontroller.enums.Lang;
-import me.pljr.pljrapi.utils.ChatUtil;
+import me.pljr.chatcontroller.config.CfgSettings;
+import me.pljr.chatcontroller.config.Lang;
+import me.pljr.pljrapispigot.builders.ActionBarBuilder;
+import me.pljr.pljrapispigot.builders.TitleBuilder;
+import me.pljr.pljrapispigot.utils.ChatUtil;
+import me.pljr.pljrapispigot.utils.PapiUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,10 +20,29 @@ public class PlayerJoinListener implements Listener {
 
         if (!player.hasPlayedBefore()){
             event.setJoinMessage(null);
-            ChatUtil.broadcast(CfgLang.lang.get(Lang.MESSAGE_JOIN_FIRST).replace("{player}", playerName), "", false);
+            ChatUtil.broadcast(PapiUtil.setPlaceholders(player, Lang.MESSAGE_JOIN_FIRST.get().replace("{player}", playerName)), "", false);
         }else{
             event.setJoinMessage(null);
-            ChatUtil.broadcast(CfgLang.lang.get(Lang.MESSAGE_JOIN).replace("{player}", playerName), "", false);
+            ChatUtil.broadcast(PapiUtil.setPlaceholders(player, Lang.MESSAGE_JOIN.get().replace("{player}", playerName)), "", false);
+        }
+
+        if (CfgSettings.JOIN_MESSAGE){
+            for (String line : Lang.JOIN_MESSAGE){
+                ChatUtil.sendMessage(player, line.replace("{player}", playerName));
+            }
+        }
+
+        if (CfgSettings.JOIN_TITLE){
+            new TitleBuilder(Lang.JOIN_TITLE)
+                    .replaceTitle("{player}", playerName)
+                    .replaceSubtitle("{player}", playerName)
+                    .create().send(player);
+        }
+
+        if (CfgSettings.JOIN_ACTIONBAR){
+            new ActionBarBuilder(Lang.JOIN_ACTIONBAR)
+                    .replaceMessage("{player}", playerName)
+                    .create().send(player);
         }
     }
 }

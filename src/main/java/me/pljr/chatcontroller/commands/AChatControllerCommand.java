@@ -1,10 +1,9 @@
 package me.pljr.chatcontroller.commands;
 
 import me.pljr.chatcontroller.ChatController;
-import me.pljr.chatcontroller.config.CfgLang;
-import me.pljr.chatcontroller.enums.Lang;
+import me.pljr.chatcontroller.config.Lang;
 import me.pljr.chatcontroller.objects.CorePlayer;
-import me.pljr.pljrapi.utils.CommandUtil;
+import me.pljr.pljrapispigot.utils.CommandUtil;
 import org.bukkit.entity.Player;
 
 public class AChatControllerCommand extends CommandUtil {
@@ -19,7 +18,7 @@ public class AChatControllerCommand extends CommandUtil {
             // /achatcontroller help
             if (args[0].equalsIgnoreCase("help")){
                 if (!checkPerm(player, "achatcontroller.help")) return;
-                sendHelp(player, CfgLang.adminHelp);
+                sendMessage(player, Lang.ADMIN_HELP);
                 return;
             }
 
@@ -28,10 +27,10 @@ public class AChatControllerCommand extends CommandUtil {
                 if (!checkPerm(player, "achatcontroller.spy")) return;
                 CorePlayer corePlayer = ChatController.getPlayerManager().getCorePlayer(player.getUniqueId());
                 if (corePlayer.isSpy()){
-                    sendMessage(player, CfgLang.lang.get(Lang.ACHATCONTROLLER_SPY_OFF));
+                    sendMessage(player, Lang.ACHATCONTROLLER_SPY_OFF.get());
                     corePlayer.setSpy(false);
                 }else{
-                    sendMessage(player, CfgLang.lang.get(Lang.ACHATCONTROLLER_SPY_ON));
+                    sendMessage(player, Lang.ACHATCONTROLLER_SPY_ON.get());
                     corePlayer.setSpy(true);
                 }
                 ChatController.getPlayerManager().setCorePlayer(player.getUniqueId(), corePlayer);
@@ -40,7 +39,7 @@ public class AChatControllerCommand extends CommandUtil {
         }
 
         if (checkPerm(player, "achatcontroller.help")){
-            sendHelp(player, CfgLang.adminHelp);
+            sendMessage(player, Lang.ADMIN_HELP);
         }
         return;
     }

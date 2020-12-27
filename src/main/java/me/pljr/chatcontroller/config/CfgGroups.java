@@ -1,7 +1,7 @@
 package me.pljr.chatcontroller.config;
 
-import me.pljr.pljrapi.managers.ConfigManager;
-import me.pljr.pljrapi.utils.PapiUtil;
+import me.pljr.pljrapispigot.managers.ConfigManager;
+import me.pljr.pljrapispigot.utils.PapiUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -10,22 +10,22 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CfgGroups {
-    private static String playerPlaceholder;
-    public static HashMap<String, String> groups;
-    public static List<String> groupNames;
+    private static String PLAYER_PLACEHOLDER;
+    public static HashMap<String, String> GROUPS;
+    public static List<String> GROUP_NAMES;
 
     public static void load(ConfigManager config){
-        playerPlaceholder = config.getString("player");
-        groups = new HashMap<>();
-        groupNames = new ArrayList<>();
+        PLAYER_PLACEHOLDER = config.getString("player");
+        GROUPS = new HashMap<>();
+        GROUP_NAMES = new ArrayList<>();
         ConfigurationSection cs = config.getConfigurationSection("groups");
         for (String group : cs.getKeys(false)){
-            groups.put(group, config.getString("groups."+group));
-            groupNames.add(group);
+            GROUPS.put(group, config.getString("groups."+group));
+            GROUP_NAMES.add(group);
         }
     }
 
     public static String getPlayerPlaceholder(Player player){
-        return PapiUtil.setPlaceholders(player, playerPlaceholder);
+        return PapiUtil.setPlaceholders(player, PLAYER_PLACEHOLDER);
     }
 }

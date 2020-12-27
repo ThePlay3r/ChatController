@@ -1,7 +1,7 @@
 package me.pljr.chatcontroller.objects;
 
-import me.pljr.pljrapi.objects.PLJRActionBar;
-import me.pljr.pljrapi.objects.PLJRTitle;
+import me.pljr.pljrapispigot.objects.PLJRActionBar;
+import me.pljr.pljrapispigot.objects.PLJRTitle;
 import org.bukkit.Sound;
 
 import java.util.List;

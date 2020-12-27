@@ -6,9 +6,8 @@ import me.pljr.chatcontroller.listeners.*;
 import me.pljr.chatcontroller.managers.BroadcastManager;
 import me.pljr.chatcontroller.managers.PlayerManager;
 import me.pljr.chatcontroller.managers.QueryManager;
-import me.pljr.pljrapi.PLJRApi;
-import me.pljr.pljrapi.database.DataSource;
-import me.pljr.pljrapi.managers.ConfigManager;
+import me.pljr.pljrapispigot.database.DataSource;
+import me.pljr.pljrapispigot.managers.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -24,7 +23,6 @@ public final class ChatController extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        if (!setupPLJRApi()) return;
         instance = this;
         setupConfig();
         setupManagers();
@@ -33,27 +31,15 @@ public final class ChatController extends JavaPlugin {
         setupCommands();
     }
 
-    private boolean setupPLJRApi(){
-        PLJRApi api = (PLJRApi) Bukkit.getServer().getPluginManager().getPlugin("PLJRApi");
-        if (api == null){
-            Bukkit.getConsoleSender().sendMessage("§cChatController: PLJRApi not found, disabling plugin!");
-            getServer().getPluginManager().disablePlugin(this);
-            return false;
-        }else{
-            Bukkit.getConsoleSender().sendMessage("§aChatController: Hooked into PLJRApi!");
-            return true;
-        }
-    }
-
     public void setupConfig(){
         saveDefaultConfig();
         reloadConfig();
-        configManager = new ConfigManager(getConfig(), "§cChatController:", "config.yml");
+        configManager = new ConfigManager(this, "config.yml");
         CfgGroups.load(configManager);
-        CfgLang.load(configManager);
+        Lang.load(configManager);
         CfgMention.load(configManager);
         CfgSettings.load(configManager);
-        CfgSounds.load(configManager);
+        SoundType.load(configManager);
         CfgBroadcasts.load(configManager);
         CfgDeathMessages.load(configManager);
     }
@@ -61,7 +47,7 @@ public final class ChatController extends JavaPlugin {
     private void setupManagers(){
         playerManager = new PlayerManager();
         broadcastManager = new BroadcastManager(this);
-        broadcastManager.startTimer(CfgSettings.broadcast);
+        broadcastManager.startTimer(CfgSettings.BROADCAST);
     }
 
     private void setupDatabase(){

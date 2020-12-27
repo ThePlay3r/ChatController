@@ -1,12 +1,13 @@
 package me.pljr.chatcontroller.commands;
 
-import me.pljr.chatcontroller.config.CfgLang;
+import me.pljr.chatcontroller.config.Lang;
 import me.pljr.chatcontroller.utils.MsgUtils;
-import me.pljr.pljrapi.utils.CommandUtil;
+import me.pljr.pljrapispigot.utils.CommandUtil;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class AMsgCommand extends CommandUtil {
@@ -26,12 +27,12 @@ public class AMsgCommand extends CommandUtil {
         }
 
         if (checkPerm(player, "achatcontroller.help")){
-            sendHelp(player, CfgLang.adminHelp);
+            sendMessage(player, Lang.ADMIN_HELP);
         }
     }
 
     @Override
-    public void onConsoleCommand(CommandSender sender, String[] args){
+    public void onConsoleCommand(ConsoleCommandSender sender, String[] args){
         if (args.length >= 2){
             // /amsg <player> <message>
             if (!checkPlayer(sender, args[0])) return;
@@ -40,6 +41,6 @@ public class AMsgCommand extends CommandUtil {
             return;
         }
 
-        sendHelp(sender, CfgLang.adminHelp);
+        sendMessage(sender, Lang.ADMIN_HELP);
     }
 }

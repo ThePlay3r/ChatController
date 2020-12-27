@@ -2,7 +2,7 @@ name: ChatController
 version: ${project.version}
 main: me.pljr.chatcontroller.ChatController
 api-version: 1.13
-depend: [PLJRApi]
+depend: [PLJRApi-Spigot]
 authors: [9hx]
 description: Plugin for handling in-game chat.
 commands:

@@ -1,9 +1,9 @@
 package me.pljr.chatcontroller.config;
 
 import me.pljr.chatcontroller.objects.Broadcast;
-import me.pljr.pljrapi.managers.ConfigManager;
-import me.pljr.pljrapi.objects.PLJRActionBar;
-import me.pljr.pljrapi.objects.PLJRTitle;
+import me.pljr.pljrapispigot.managers.ConfigManager;
+import me.pljr.pljrapispigot.objects.PLJRActionBar;
+import me.pljr.pljrapispigot.objects.PLJRTitle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -12,12 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CfgBroadcasts {
-    public static HashMap<String, Broadcast> broadcasts;
-    public static List<String> broadcastNames;
+    public static HashMap<String, Broadcast> BROADCASTS;
+    public static List<String> BROADCASTS_NAMES;
 
     public static void load(ConfigManager config){
-        CfgBroadcasts.broadcasts = new HashMap<>();
-        CfgBroadcasts.broadcastNames = new ArrayList<>();
+        CfgBroadcasts.BROADCASTS = new HashMap<>();
+        CfgBroadcasts.BROADCASTS_NAMES = new ArrayList<>();
         ConfigurationSection broadcasts = config.getConfigurationSection("broadcasts");
         for (String broadcast : broadcasts.getKeys(false)){
             String perm = config.getString("broadcasts."+broadcast+".perm");
@@ -28,8 +28,8 @@ public class CfgBroadcasts {
             PLJRTitle title = config.getPLJRTitle("broadcasts."+broadcast+".title.title");
             boolean actionbarEnabled = config.getBoolean("broadcasts."+broadcast+".actionbar.enabled");
             PLJRActionBar actionbar = config.getPLJRActionBar("broadcasts."+broadcast+".actionbar.actionbar");
-            CfgBroadcasts.broadcasts.put(broadcast, new Broadcast(perm, sound, messageEnabled, message, titleEnabled, title, actionbarEnabled, actionbar));
-            CfgBroadcasts.broadcastNames.add(broadcast);
+            CfgBroadcasts.BROADCASTS.put(broadcast, new Broadcast(perm, sound, messageEnabled, message, titleEnabled, title, actionbarEnabled, actionbar));
+            CfgBroadcasts.BROADCASTS_NAMES.add(broadcast);
         }
     }
 }

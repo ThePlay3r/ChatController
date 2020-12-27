@@ -1,10 +1,9 @@
 package me.pljr.chatcontroller.commands;
 
 import me.pljr.chatcontroller.ChatController;
-import me.pljr.chatcontroller.config.CfgLang;
-import me.pljr.chatcontroller.enums.Lang;
+import me.pljr.chatcontroller.config.Lang;
 import me.pljr.chatcontroller.objects.CorePlayer;
-import me.pljr.pljrapi.utils.CommandUtil;
+import me.pljr.pljrapispigot.utils.CommandUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -25,10 +24,10 @@ public class MsgIgnoreCommand extends CommandUtil {
             if (!checkPerm(player, "chatcontroller.msgignore.use.fullignore")) return;
             CorePlayer corePlayer = ChatController.getPlayerManager().getCorePlayer(player.getUniqueId());
             if (corePlayer.isIgnoring()){
-                sendMessage(player, CfgLang.lang.get(Lang.MSGIGNORE_SUCCESS_FULLIGNORE_OFF));
+                sendMessage(player, Lang.MSGIGNORE_SUCCESS_FULLIGNORE_OFF.get());
                 corePlayer.setIgnoring(false);
             }else{
-                sendMessage(player, CfgLang.lang.get(Lang.MSGIGNORE_SUCCESS_FULLIGNORE_ON));
+                sendMessage(player, Lang.MSGIGNORE_SUCCESS_FULLIGNORE_ON.get());
                 corePlayer.setIgnoring(true);
             }
             ChatController.getPlayerManager().setCorePlayer(player.getUniqueId(), corePlayer);
@@ -42,10 +41,10 @@ public class MsgIgnoreCommand extends CommandUtil {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
             List<UUID> ignoreList = corePlayer.getIgnoreList();
             if (ignoreList.contains(offlinePlayer.getUniqueId())){
-                sendMessage(player, CfgLang.lang.get(Lang.MSGIGNORE_SUCCESS_UNIGNORE).replace("{player}", args[0]));
+                sendMessage(player, Lang.MSGIGNORE_SUCCESS_UNIGNORE.get().replace("{player}", args[0]));
                 ignoreList.remove(offlinePlayer.getUniqueId());
             }else{
-                sendMessage(player, CfgLang.lang.get(Lang.MSGIGNORE_SUCCESS_IGNORE).replace("{player}", args[0]));
+                sendMessage(player, Lang.MSGIGNORE_SUCCESS_IGNORE.get().replace("{player}", args[0]));
                 ignoreList.add(offlinePlayer.getUniqueId());
             }
             corePlayer.setIgnoreList(ignoreList);
@@ -54,7 +53,7 @@ public class MsgIgnoreCommand extends CommandUtil {
         }
 
         if (checkPerm(player, "chatcontroller.help")){
-            sendHelp(player, CfgLang.help);
+            sendMessage(player, Lang.HELP);
         }
     }
 }
