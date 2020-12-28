@@ -2,7 +2,6 @@ package me.pljr.chatcontroller.utils;
 
 import me.pljr.chatcontroller.ChatController;
 import me.pljr.chatcontroller.config.CfgSettings;
-import me.pljr.chatcontroller.config.CfgSounds;
 import me.pljr.chatcontroller.config.Lang;
 import me.pljr.chatcontroller.config.SoundType;
 import me.pljr.chatcontroller.objects.CorePlayer;

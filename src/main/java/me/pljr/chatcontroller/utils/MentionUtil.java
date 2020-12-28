@@ -2,7 +2,6 @@ package me.pljr.chatcontroller.utils;
 
 import me.pljr.chatcontroller.config.CfgMention;
 import me.pljr.chatcontroller.config.CfgSettings;
-import me.pljr.chatcontroller.config.CfgSounds;
 import me.pljr.chatcontroller.config.SoundType;
 import me.pljr.pljrapispigot.builders.ActionBarBuilder;
 import me.pljr.pljrapispigot.builders.SoundBuilder;

@@ -3,7 +3,6 @@ package me.pljr.chatcontroller.commands;
 import me.pljr.chatcontroller.ChatController;
 import me.pljr.chatcontroller.config.Lang;
 import me.pljr.pljrapispigot.utils.CommandUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
