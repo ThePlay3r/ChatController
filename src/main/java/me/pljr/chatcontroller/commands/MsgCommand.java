@@ -36,7 +36,7 @@ public class MsgCommand extends CommandUtil {
         }
 
         if (checkPerm(player, "chatcontroller.help")){
-            sendMessage(player, Lang.HELP);
+            sendMessage(player, Lang.HELP.get());
         }
     }
 
@@ -55,6 +55,6 @@ public class MsgCommand extends CommandUtil {
             return;
         }
 
-        sendMessage(sender, Lang.HELP);
+        sendMessage(sender, Lang.HELP.get());
     }
 }

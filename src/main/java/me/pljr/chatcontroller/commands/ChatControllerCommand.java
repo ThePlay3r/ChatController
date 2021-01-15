@@ -18,7 +18,7 @@ public class ChatControllerCommand extends CommandUtil {
             // /chatcontroller help
             if (args[0].equalsIgnoreCase("help")){
                 if (!checkPerm(player, "chatcontroller.help"))
-                    sendMessage(player, Lang.HELP);
+                    sendMessage(player, Lang.HELP.get());
                 return;
             }
 
@@ -26,7 +26,7 @@ public class ChatControllerCommand extends CommandUtil {
             if (args[0].equalsIgnoreCase("reload")){
                 if (!checkPerm(player, "chatcontroller.reload")) return;
                 ChatController.getInstance().setupConfig();
-                player.sendMessage("§a§l✔");
+                player.sendMessage("&a&l✔");
                 return;
             }
         }
@@ -37,14 +37,14 @@ public class ChatControllerCommand extends CommandUtil {
         if (args.length == 1){
             // /chatcontroller help
             if (args[0].equalsIgnoreCase("help")){
-                sendMessage(sender, Lang.HELP);
+                sendMessage(sender, Lang.HELP.get());
                 return;
             }
 
             // /chatcontroller reload
             if (args[0].equalsIgnoreCase("reload")){
                 ChatController.getInstance().setupConfig();
-                sender.sendMessage("§a§l✔");
+                sender.sendMessage("&a&l✔");
                 return;
             }
         }

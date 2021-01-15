@@ -1,24 +1,41 @@
 package me.pljr.chatcontroller.config;
 
 import me.pljr.pljrapispigot.managers.ConfigManager;
+import me.pljr.pljrapispigot.objects.PLJRSound;
+import me.pljr.pljrapispigot.xseries.XSound;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 
 public enum SoundType {
-    MENTION,
-    PRIVATE_MESSAGE;
+    MENTION(new PLJRSound(XSound.ENTITY_PLAYER_LEVELUP.parseSound(), 1, 1)),
+    PRIVATE_MESSAGE(new PLJRSound(XSound.ENTITY_PLAYER_LEVELUP.parseSound(), 1, 1));
 
-    public static HashMap<SoundType, Sound> sounds;
+    private static HashMap<SoundType, PLJRSound> sounds;
+    private final PLJRSound defaultValue;
+
+    SoundType(PLJRSound defaultValue){
+        this.defaultValue = defaultValue;
+    }
 
     public static void load(ConfigManager config){
         sounds = new HashMap<>();
+        FileConfiguration fileConfig = config.getConfig();
         for (SoundType soundType : SoundType.values()){
-            sounds.put(soundType, config.getSound("sounds."+soundType.toString()));
+            if (!fileConfig.isSet(soundType.toString())){
+                config.setPLJRSound(soundType.toString(), soundType.getDefault());
+            }
+            sounds.put(soundType, config.getPLJRSound(soundType.toString()));
         }
+        config.save();
     }
 
-    public Sound get(){
+    public PLJRSound get(){
         return sounds.get(this);
+    }
+
+    public PLJRSound getDefault(){
+        return this.defaultValue;
     }
 }

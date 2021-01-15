@@ -10,6 +10,9 @@ public class CfgSettings {
     public static boolean JOIN_MESSAGE;
     public static boolean JOIN_TITLE;
     public static boolean JOIN_ACTIONBAR;
+    public static boolean MENTION_MESSAGE;
+    public static boolean MENTION_TITLE;
+    public static boolean MENTION_ACTIONBAR;
 
     public static void load(ConfigManager config){
         BUNGEE = config.getBoolean("settings.bungee");
@@ -19,5 +22,8 @@ public class CfgSettings {
         JOIN_MESSAGE = config.getBoolean("settings.join-message");
         JOIN_TITLE = config.getBoolean("settings.join-title");
         JOIN_ACTIONBAR = config.getBoolean("settings.join-actionbar");
+        MENTION_MESSAGE = config.getBoolean("settigs.mention-message");
+        MENTION_TITLE = config.getBoolean("settigs.mention-title");
+        MENTION_ACTIONBAR = config.getBoolean("settigs.mention-actionbar");
     }
 }

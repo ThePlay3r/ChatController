@@ -19,13 +19,9 @@ public class MsgUtils {
         String senderName = sender.getName();
         String receiverName = receiver.getName();
         message = MiniMessageUtil.strip(message);
-        if (CfgSettings.SOUNDS) receiver.playSound(receiver.getLocation(), SoundType.PRIVATE_MESSAGE.get(), 1, 1);
-        for (String line : Lang.PRIVATE_MESSAGE_SENDER){
-            ChatUtil.sendMessage(sender, line.replace("{sender}", senderName).replace("{receiver}", receiverName).replace("{message}", message));
-        }
-        for (String line : Lang.PRIVATE_MESSAGE_RECEIVER){
-            ChatUtil.sendMessage(receiver, line.replace("{sender}", senderName).replace("{receiver}", receiverName).replace("{message}", message));
-        }
+        if (CfgSettings.SOUNDS) SoundType.PRIVATE_MESSAGE.get().play(receiver);
+        ChatUtil.sendMessage(sender, Lang.PRIVATE_MESSAGE_SENDER.get().replace("{sender}", senderName).replace("{receiver}", receiverName).replace("{message}", message));
+        ChatUtil.sendMessage(receiver, Lang.PRIVATE_MESSAGE_RECEIVER.get().replace("{sender}", senderName).replace("{receiver}", receiverName).replace("{message}", message));
         for (Player player : Bukkit.getOnlinePlayers()){
             UUID playerId = player.getUniqueId();
             CorePlayer corePlayer = ChatController.getPlayerManager().getCorePlayer(playerId);

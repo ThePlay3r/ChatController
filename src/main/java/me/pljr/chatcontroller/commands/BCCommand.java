@@ -23,7 +23,7 @@ public class BCCommand extends CommandUtil {
         }
 
         if (checkPerm(player, "achatcontroller.help")){
-            sendMessage(player, Lang.ADMIN_HELP);
+            sendMessage(player, Lang.ADMIN_HELP.get());
         }
     }
 
@@ -34,6 +34,6 @@ public class BCCommand extends CommandUtil {
             return;
         }
 
-        sendMessage(sender, Lang.ADMIN_HELP);
+        sendMessage(sender, Lang.ADMIN_HELP.get());
     }
 }

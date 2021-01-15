@@ -36,12 +36,13 @@ public final class ChatController extends JavaPlugin {
         reloadConfig();
         configManager = new ConfigManager(this, "config.yml");
         CfgGroups.load(configManager);
-        Lang.load(configManager);
-        CfgMention.load(configManager);
         CfgSettings.load(configManager);
-        SoundType.load(configManager);
         CfgBroadcasts.load(configManager);
         CfgDeathMessages.load(configManager);
+        Lang.load(configManager);
+        ActionBarType.load(new ConfigManager(this, "actionbars.yml"));
+        SoundType.load(new ConfigManager(this, "sounds.yml"));
+        TitleType.load(new ConfigManager(this, "titles.yml"));
     }
 
     private void setupManagers(){

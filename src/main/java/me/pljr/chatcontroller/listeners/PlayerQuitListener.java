@@ -24,6 +24,6 @@ public class PlayerQuitListener implements Listener {
         queryManager.savePlayer(playerId);
 
         event.setQuitMessage(null);
-        ChatUtil.broadcast(PapiUtil.setPlaceholders(player, Lang.MESSAGE_LEAVE.get().replace("{player}", playerName)), "", false);
+        ChatUtil.broadcast(PapiUtil.setPlaceholders(player, Lang.QUIT_MESSAGE.get().replace("{player}", playerName)), "", false);
     }
 }

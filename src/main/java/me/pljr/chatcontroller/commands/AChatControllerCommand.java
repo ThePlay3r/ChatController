@@ -18,7 +18,7 @@ public class AChatControllerCommand extends CommandUtil {
             // /achatcontroller help
             if (args[0].equalsIgnoreCase("help")){
                 if (!checkPerm(player, "achatcontroller.help")) return;
-                sendMessage(player, Lang.ADMIN_HELP);
+                sendMessage(player, Lang.ADMIN_HELP.get());
                 return;
             }
 
@@ -39,7 +39,7 @@ public class AChatControllerCommand extends CommandUtil {
         }
 
         if (checkPerm(player, "achatcontroller.help")){
-            sendMessage(player, Lang.ADMIN_HELP);
+            sendMessage(player, Lang.ADMIN_HELP.get());
         }
         return;
     }

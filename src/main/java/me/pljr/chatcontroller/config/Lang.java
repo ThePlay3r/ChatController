@@ -3,49 +3,83 @@ package me.pljr.chatcontroller.config;
 import me.pljr.pljrapispigot.managers.ConfigManager;
 import me.pljr.pljrapispigot.objects.PLJRActionBar;
 import me.pljr.pljrapispigot.objects.PLJRTitle;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 import java.util.List;
 
 public enum Lang {
-    ADMIN_CHAT_FORMAT,
-    MSG_FAILURE_IGNORING,
-    MSG_FAILURE_BLOCKED,
-    MSGIGNORE_SUCCESS_FULLIGNORE_ON,
-    MSGIGNORE_SUCCESS_FULLIGNORE_OFF,
-    MSGIGNORE_SUCCESS_IGNORE,
-    MSGIGNORE_SUCCESS_UNIGNORE,
-    ACHATCONTROLLER_SPY_ON,
-    ACHATCONTROLLER_SPY_OFF,
-    ADMIN_SPY,
-    MESSAGE_JOIN_FIRST,
-    MESSAGE_JOIN,
-    MESSAGE_LEAVE;
-    public static List<String> PRIVATE_MESSAGE_SENDER;
-    public static List<String> PRIVATE_MESSAGE_RECEIVER;
-    public static List<String> HELP;
-    public static List<String> ADMIN_HELP;
-    public static List<String> JOIN_MESSAGE;
-    public static PLJRTitle JOIN_TITLE;
-    public static PLJRActionBar JOIN_ACTIONBAR;
+    PRIVATE_MESSAGE_SENDER("" +
+            "\n&7✉ &b{sender} &8&l> &b{receiver}" +
+            "\n" +
+            "\n&8&l■ &f{message}" +
+            "\n"),
 
-    public static HashMap<Lang, String> lang;
+    PRIVATE_MESSAGE_RECEIVER("" +
+            "\n&7✉ &b{sender} &8&l> &b{receiver}" +
+            "\n" +
+            "\n&8&l■ &f{message}" +
+            "\n"),
+
+    HELP("" +
+            "\n&a&lChatController Help" +
+            "\n" +
+            "\n&e/chatcontroller help &8» &fDisplays this message." +
+            "\n" +
+            "\n" +
+            "\n" +
+            "\n"),
+
+    ADMIN_HELP("" +
+            "\n&a&lChatController Admin-Help" +
+            "\n" +
+            "\n&e/achatcontroller help &8» &fDisplays this message." +
+            "\n&e/achatcontroller spy &8» &fToggles spying on private messages." +
+            "\n&e/achat <message> &8» &fSends message to admin chat." +
+            "\n&e/amsg <player> <message> &8» &fSends private message to player, ignoring his ignore list." +
+            "\n&e/bc <message> &8» &fBroadcasts message." +
+            "\n"),
+
+    ADMIN_CHAT_FORMAT("&4&lAT &c{player} &4> &c{message}"),
+    ADMIN_SPY("&cMSG: &8{sender} : {receiver} > &7{message}"),
+    MSG_FAILURE_IGNORING("&aChatController &8» &b{player} &fis not receiving any private messages."),
+    MSG_FAILURE_BLOCKED("&aChatController &8» &b{player} &fhas blocked you."),
+    MSGIGNORE_SUCCESS_FULLIGNORE_ON("&aChatController &8» &fYou are now ignoring everyone."),
+    MSGIGNORE_SUCCESS_FULLIGNORE_OFF("&aChatController &8» &fYou are no longed ignoring everyone."),
+    MSGIGNORE_SUCCESS_IGNORE("&aChatController &8» &fYou are now ignoring messages from &b{player}&f."),
+    MSGIGNORE_SUCCESS_UNIGNORE("&aChatController &8» &fYou are no longer ignoring messages from &b{player}&f."),
+    ACHATCONTROLLER_SPY_ON("&aChatController &8» &fYou can now see private messages."),
+    ACHATCONTROLLER_SPY_OFF("&aChatController &8» &fYou no longer can see private messages."),
+    FIRST_JOIN_MESSAGE("&a{player} &fhas joined for the &bfirst time&f!"),
+    JOIN_MESSAGE_PLAYER("&8&l> &fHey &b{player}&f, welcome to server!"),
+    JOIN_MESSAGE("&a&l● &a&o{player}"),
+    QUIT_MESSAGE( "&c&l● &c&o{player}"),
+    MENTION_MESSAGE("&e{player} &amentioned you!");
+
+    private static HashMap<Lang, String> lang;
+    private final String defaultValue;
+
+    Lang(String defaultValue){
+        this.defaultValue = defaultValue;
+    }
 
     public static void load(ConfigManager config){
-        PRIVATE_MESSAGE_SENDER = config.getStringList("private-message-sender");
-        PRIVATE_MESSAGE_RECEIVER = config.getStringList("private-message-receiver");
-        HELP = config.getStringList("help");
-        ADMIN_HELP = config.getStringList("admin-help");
-        JOIN_MESSAGE = config.getStringList("join-message");
-        JOIN_TITLE = config.getPLJRTitle("join-title");
-        JOIN_ACTIONBAR = config.getPLJRActionBar("join-actionbar");
         lang = new HashMap<>();
+        FileConfiguration fileConfig = config.getConfig();
         for (Lang lang : values()){
-            Lang.lang.put(lang, config.getString("lang."+lang));
+            if (!fileConfig.isSet(lang.toString())){
+                fileConfig.set(lang.toString(), lang.getDefault());
+            }
+            Lang.lang.put(lang, config.getString(lang.toString()));
         }
+        config.save();
     }
 
     public String get(){
         return lang.get(this);
+    }
+
+    public String getDefault(){
+        return this.defaultValue;
     }
 }

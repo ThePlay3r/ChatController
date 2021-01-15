@@ -53,7 +53,7 @@ public class MsgIgnoreCommand extends CommandUtil {
         }
 
         if (checkPerm(player, "chatcontroller.help")){
-            sendMessage(player, Lang.HELP);
+            sendMessage(player, Lang.HELP.get());
         }
     }
 }
