@@ -22,8 +22,8 @@ public class CfgSettings {
         JOIN_MESSAGE = config.getBoolean("settings.join-message");
         JOIN_TITLE = config.getBoolean("settings.join-title");
         JOIN_ACTIONBAR = config.getBoolean("settings.join-actionbar");
-        MENTION_MESSAGE = config.getBoolean("settigs.mention-message");
-        MENTION_TITLE = config.getBoolean("settigs.mention-title");
-        MENTION_ACTIONBAR = config.getBoolean("settigs.mention-actionbar");
+        MENTION_MESSAGE = config.getBoolean("settings.mention-message");
+        MENTION_TITLE = config.getBoolean("settings.mention-title");
+        MENTION_ACTIONBAR = config.getBoolean("settings.mention-actionbar");
     }
 }

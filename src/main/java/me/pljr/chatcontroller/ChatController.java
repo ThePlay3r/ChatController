@@ -39,7 +39,7 @@ public final class ChatController extends JavaPlugin {
         CfgSettings.load(configManager);
         CfgBroadcasts.load(configManager);
         CfgDeathMessages.load(configManager);
-        Lang.load(configManager);
+        Lang.load(new ConfigManager(this, "lang.yml"));
         ActionBarType.load(new ConfigManager(this, "actionbars.yml"));
         SoundType.load(new ConfigManager(this, "sounds.yml"));
         TitleType.load(new ConfigManager(this, "titles.yml"));
