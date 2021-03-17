@@ -34,10 +34,11 @@ public final class ChatController extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        log = getLogger();
         if (!setupPLJRApi()) return;
         setupConfig();
-        setupManagers();
         setupDatabase();
+        setupManagers();
         setupListeners();
         setupCommands();
     }
