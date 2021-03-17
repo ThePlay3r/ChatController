@@ -22,18 +22,15 @@ public enum ActionBarType {
         FileConfiguration fileConfig = config.getConfig();
         for (ActionBarType actionBarType : values()){
             if (!fileConfig.isSet(actionBarType.toString())){
-                config.setPLJRActionBar(actionBarType.toString(), actionBarType.getDefault());
+                config.setPLJRActionBar(actionBarType.toString(), actionBarType.defaultValue);
+            }else{
+                actionbars.put(actionBarType, config.getPLJRActionBar(actionBarType.toString()));
             }
-            actionbars.put(actionBarType, config.getPLJRActionBar(actionBarType.toString()));
         }
         config.save();
     }
 
     public PLJRActionBar get(){
-        return actionbars.get(this);
-    }
-
-    public PLJRActionBar getDefault(){
-        return this.defaultValue;
+        return actionbars.getOrDefault(this, defaultValue);
     }
 }

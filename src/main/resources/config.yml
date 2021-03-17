@@ -37,6 +37,7 @@ settings:
   mention-message: true #-> Should we send player message, when mentioned?
   mention-title: true #-> Should we send player title, when mentioned?
   mention-actionbar: true #-> Should we send player actionbar, when mentioned?
+  cache-players: true # Should we save player data in memory? (false = loading on each join)
 #|--------------------------------------------------------------------------------------------------------------------|#
 
 ################\
@@ -46,16 +47,12 @@ settings:
 
 # Used to save space in the groups setup, the message set here,
 # will be replaced in groups, using {player} as placeholders.
-player: "
-<hover:show_text:'Click to send private message.'>
-<click:suggest_command:'/msg %player_name%'>
-&f%player_name%
-</click></hover>"
+player: "<hover:show_text:'Click to send private message.'><click:suggest_command:'/msg %player_name%'>&f%player_name%</click></hover>"
 
 groups:
   # Permission to use: "chatcontroller.groups.<group>"
-  admin: "&cAdmin {player} &8> &7{message}"
-  default: "{player} &8> &7{message}"
+  admin: "&cAdmin {player} &8> &7<pre>{message}</pre>"
+  default: "{player} &8> &7<pre>{message}</pre>"
 #|--------------------------------------------------------------------------------------------------------------------|#
 
 ####################\

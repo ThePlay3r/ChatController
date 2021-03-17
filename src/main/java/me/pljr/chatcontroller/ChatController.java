@@ -6,6 +6,7 @@ import me.pljr.chatcontroller.listeners.*;
 import me.pljr.chatcontroller.managers.BroadcastManager;
 import me.pljr.chatcontroller.managers.PlayerManager;
 import me.pljr.chatcontroller.managers.QueryManager;
+import me.pljr.pljrapispigot.PLJRApiSpigot;
 import me.pljr.pljrapispigot.database.DataSource;
 import me.pljr.pljrapispigot.managers.ConfigManager;
 import org.bukkit.Bukkit;
@@ -13,17 +14,27 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Logger;
+
 public final class ChatController extends JavaPlugin {
-    private static ChatController instance;
-    private static ConfigManager configManager;
-    private static PlayerManager playerManager;
-    private static QueryManager queryManager;
-    private static BroadcastManager broadcastManager;
+
+    public static Logger log;
+
+    private PLJRApiSpigot pljrApiSpigot;
+
+    private ConfigManager configManager;
+    private Groups groups;
+    private Settings settings;
+    private Broadcasts broadcasts;
+    private DeathMessages deathMessages;
+
+    private PlayerManager playerManager;
+    private QueryManager queryManager;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-        instance = this;
+        if (!setupPLJRApi()) return;
         setupConfig();
         setupManagers();
         setupDatabase();
@@ -31,14 +42,23 @@ public final class ChatController extends JavaPlugin {
         setupCommands();
     }
 
+    public boolean setupPLJRApi(){
+        if (PLJRApiSpigot.get() == null){
+            getLogger().warning("PLJRApi-Spigot is not enabled!");
+            return false;
+        }
+        pljrApiSpigot = PLJRApiSpigot.get();
+        return true;
+    }
+
     public void setupConfig(){
         saveDefaultConfig();
         reloadConfig();
         configManager = new ConfigManager(this, "config.yml");
-        CfgGroups.load(configManager);
-        CfgSettings.load(configManager);
-        CfgBroadcasts.load(configManager);
-        CfgDeathMessages.load(configManager);
+        groups = new Groups(configManager);
+        settings = new Settings(configManager);
+        broadcasts = new Broadcasts(configManager);
+        deathMessages = new DeathMessages(configManager);
         Lang.load(new ConfigManager(this, "lang.yml"));
         ActionBarType.load(new ConfigManager(this, "actionbars.yml"));
         SoundType.load(new ConfigManager(this, "sounds.yml"));
@@ -46,14 +66,14 @@ public final class ChatController extends JavaPlugin {
     }
 
     private void setupManagers(){
-        playerManager = new PlayerManager();
-        broadcastManager = new BroadcastManager(this);
-        broadcastManager.startTimer(CfgSettings.BROADCAST);
+        playerManager = new PlayerManager(this, queryManager, settings.isCachePlayers());
+        BroadcastManager broadcastManager = new BroadcastManager(this, broadcasts, settings);
+        broadcastManager.startTimer(settings.getBroadcast());
     }
 
     private void setupDatabase(){
-        DataSource dataSource = DataSource.getFromConfig(configManager);
-        queryManager = new QueryManager(dataSource, this);
+        DataSource dataSource = pljrApiSpigot.getDataSource(configManager);
+        queryManager = new QueryManager(dataSource);
         queryManager.setupTables();
         for (Player player : Bukkit.getOnlinePlayers()){
             queryManager.loadPlayer(player.getUniqueId());
@@ -62,41 +82,28 @@ public final class ChatController extends JavaPlugin {
 
     private void setupListeners(){
         PluginManager pluginManager = getServer().getPluginManager();
-        pluginManager.registerEvents(new AsyncPlayerChatListener(), this);
-        pluginManager.registerEvents(new AsyncPlayerPreLoginListener(), this);
-        pluginManager.registerEvents(new PlayerQuitListener(), this);
-        pluginManager.registerEvents(new PlayerJoinListener(), this);
-        pluginManager.registerEvents(new PlayerDeathListener(), this);
+        pluginManager.registerEvents(new AsyncPlayerChatListener(groups, settings), this);
+        pluginManager.registerEvents(new AsyncPlayerPreLoginListener(playerManager), this);
+        pluginManager.registerEvents(new PlayerQuitListener(playerManager), this);
+        pluginManager.registerEvents(new PlayerJoinListener(settings), this);
+        pluginManager.registerEvents(new PlayerDeathListener(deathMessages, settings), this);
     }
 
     private void setupCommands(){
-        new ChatControllerCommand().registerCommand(this);
-        new MsgCommand().registerCommand(this);
-        new MsgIgnoreCommand().registerCommand(this);
-        new AChatControllerCommand().registerCommand(this);
-        new AChatCommand().registerCommand(this);
-        new AMsgCommand().registerCommand(this);
-        new BCCommand().registerCommand(this);
-    }
-
-    public static ConfigManager getConfigManager() {
-        return configManager;
-    }
-    public static PlayerManager getPlayerManager() {
-        return playerManager;
-    }
-    public static QueryManager getQueryManager() {
-        return queryManager;
-    }
-    public static ChatController getInstance() {
-        return instance;
+        new ChatControllerCommand(this).registerCommand(this);
+        new MsgCommand(playerManager).registerCommand(this);
+        new MsgIgnoreCommand(playerManager).registerCommand(this);
+        new AChatControllerCommand(playerManager).registerCommand(this);
+        new AChatCommand(settings).registerCommand(this);
+        new AMsgCommand(playerManager).registerCommand(this);
+        new BCCommand(settings).registerCommand(this);
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
         for (Player player : Bukkit.getOnlinePlayers()){
-            queryManager.savePlayerSync(player.getUniqueId());
+            playerManager.getPlayer(player.getUniqueId(), queryManager::savePlayer);
         }
     }
 }

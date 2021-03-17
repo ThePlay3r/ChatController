@@ -2,14 +2,17 @@ package me.pljr.chatcontroller.commands;
 
 import me.pljr.chatcontroller.ChatController;
 import me.pljr.chatcontroller.config.Lang;
-import me.pljr.pljrapispigot.utils.CommandUtil;
+import me.pljr.pljrapispigot.commands.BukkitCommand;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class ChatControllerCommand extends CommandUtil {
+public class ChatControllerCommand extends BukkitCommand {
 
-    public ChatControllerCommand(){
+    private final ChatController chatController;
+
+    public ChatControllerCommand(ChatController chatController){
         super("chatcontroller", "chatcontroller.use");
+        this.chatController = chatController;
     }
 
     @Override
@@ -25,7 +28,7 @@ public class ChatControllerCommand extends CommandUtil {
             // /chatcontroller reload
             if (args[0].equalsIgnoreCase("reload")){
                 if (!checkPerm(player, "chatcontroller.reload")) return;
-                ChatController.getInstance().setupConfig();
+                chatController.setupConfig();
                 player.sendMessage("&a&l✔");
                 return;
             }
@@ -43,7 +46,7 @@ public class ChatControllerCommand extends CommandUtil {
 
             // /chatcontroller reload
             if (args[0].equalsIgnoreCase("reload")){
-                ChatController.getInstance().setupConfig();
+                chatController.setupConfig();
                 sender.sendMessage("&a&l✔");
                 return;
             }

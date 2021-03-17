@@ -3,6 +3,7 @@ package me.pljr.chatcontroller.config;
 import me.pljr.pljrapispigot.managers.ConfigManager;
 import me.pljr.pljrapispigot.objects.PLJRActionBar;
 import me.pljr.pljrapispigot.objects.PLJRTitle;
+import me.pljr.pljrapispigot.utils.FormatUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public enum Lang {
             "\n&e/bc <message> &8» &fBroadcasts message." +
             "\n"),
 
-    ADMIN_CHAT_FORMAT("&4&lAT &c{player} &4> &c{message}"),
+    ADMIN_CHAT_FORMAT("&4&lAT &c{player} &4> &c<pre>{message}</pre>"),
     ADMIN_SPY("&cMSG: &8{sender} : {receiver} > &7{message}"),
     MSG_FAILURE_IGNORING("&aChatController &8» &b{player} &fis not receiving any private messages."),
     MSG_FAILURE_BLOCKED("&aChatController &8» &b{player} &fhas blocked you."),
@@ -68,18 +69,15 @@ public enum Lang {
         FileConfiguration fileConfig = config.getConfig();
         for (Lang lang : values()){
             if (!fileConfig.isSet(lang.toString())){
-                fileConfig.set(lang.toString(), lang.getDefault());
+                fileConfig.set(lang.toString(), lang.defaultValue);
+            }else{
+                Lang.lang.put(lang, config.getString(lang.toString()));
             }
-            Lang.lang.put(lang, config.getString(lang.toString()));
         }
         config.save();
     }
 
     public String get(){
-        return lang.get(this);
-    }
-
-    public String getDefault(){
-        return this.defaultValue;
+        return lang.getOrDefault(this, FormatUtil.colorString(defaultValue));
     }
 }

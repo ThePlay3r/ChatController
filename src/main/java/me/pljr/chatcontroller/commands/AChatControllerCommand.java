@@ -2,14 +2,18 @@ package me.pljr.chatcontroller.commands;
 
 import me.pljr.chatcontroller.ChatController;
 import me.pljr.chatcontroller.config.Lang;
-import me.pljr.chatcontroller.objects.CorePlayer;
-import me.pljr.pljrapispigot.utils.CommandUtil;
+import me.pljr.chatcontroller.managers.PlayerManager;
+import me.pljr.chatcontroller.objects.ChatPlayer;
+import me.pljr.pljrapispigot.commands.BukkitCommand;
 import org.bukkit.entity.Player;
 
-public class AChatControllerCommand extends CommandUtil {
+public class AChatControllerCommand extends BukkitCommand {
 
-    public AChatControllerCommand(){
+    private final PlayerManager playerManager;
+
+    public AChatControllerCommand(PlayerManager playerManager){
         super("achatcontroller", "achatcontroller.use");
+        this.playerManager = playerManager;
     }
 
     @Override
@@ -25,15 +29,16 @@ public class AChatControllerCommand extends CommandUtil {
             // /achatcontroller spy
             if (args[0].equalsIgnoreCase("spy")){
                 if (!checkPerm(player, "achatcontroller.spy")) return;
-                CorePlayer corePlayer = ChatController.getPlayerManager().getCorePlayer(player.getUniqueId());
-                if (corePlayer.isSpy()){
-                    sendMessage(player, Lang.ACHATCONTROLLER_SPY_OFF.get());
-                    corePlayer.setSpy(false);
-                }else{
-                    sendMessage(player, Lang.ACHATCONTROLLER_SPY_ON.get());
-                    corePlayer.setSpy(true);
-                }
-                ChatController.getPlayerManager().setCorePlayer(player.getUniqueId(), corePlayer);
+                playerManager.getPlayer(player.getUniqueId(), chatPlayer -> {
+                    if (chatPlayer.isSpy()){
+                        sendMessage(player, Lang.ACHATCONTROLLER_SPY_OFF.get());
+                        chatPlayer.setSpy(false);
+                    }else{
+                        sendMessage(player, Lang.ACHATCONTROLLER_SPY_ON.get());
+                        chatPlayer.setSpy(true);
+                    }
+                    playerManager.setPlayer(player.getUniqueId(), chatPlayer);
+                });
                 return;
             }
         }
@@ -41,6 +46,5 @@ public class AChatControllerCommand extends CommandUtil {
         if (checkPerm(player, "achatcontroller.help")){
             sendMessage(player, Lang.ADMIN_HELP.get());
         }
-        return;
     }
 }

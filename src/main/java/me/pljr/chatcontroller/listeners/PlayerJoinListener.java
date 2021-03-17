@@ -1,7 +1,8 @@
 package me.pljr.chatcontroller.listeners;
 
+import lombok.AllArgsConstructor;
 import me.pljr.chatcontroller.config.ActionBarType;
-import me.pljr.chatcontroller.config.CfgSettings;
+import me.pljr.chatcontroller.config.Settings;
 import me.pljr.chatcontroller.config.Lang;
 import me.pljr.chatcontroller.config.TitleType;
 import me.pljr.pljrapispigot.builders.ActionBarBuilder;
@@ -13,7 +14,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+@AllArgsConstructor
 public class PlayerJoinListener implements Listener {
+
+    private final Settings settings;
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
@@ -28,18 +32,18 @@ public class PlayerJoinListener implements Listener {
             ChatUtil.broadcast(PapiUtil.setPlaceholders(player, Lang.JOIN_MESSAGE.get().replace("{player}", playerName)), "", false);
         }
 
-        if (CfgSettings.JOIN_MESSAGE){
+        if (settings.isJoinMessage()){
             ChatUtil.sendMessage(player, Lang.JOIN_MESSAGE_PLAYER.get().replace("{player}", playerName));
         }
 
-        if (CfgSettings.JOIN_TITLE){
+        if (settings.isJoinTitle()){
             new TitleBuilder(TitleType.JOIN_TITLE.get())
                     .replaceTitle("{player}", playerName)
                     .replaceSubtitle("{player}", playerName)
                     .create().send(player);
         }
 
-        if (CfgSettings.JOIN_ACTIONBAR){
+        if (settings.isJoinActionbar()){
             new ActionBarBuilder(ActionBarType.JOIN_ACTIONBAR.get())
                     .replaceMessage("{player}", playerName)
                     .create().send(player);

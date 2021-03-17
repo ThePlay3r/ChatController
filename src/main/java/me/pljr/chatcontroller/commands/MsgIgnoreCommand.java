@@ -2,8 +2,9 @@ package me.pljr.chatcontroller.commands;
 
 import me.pljr.chatcontroller.ChatController;
 import me.pljr.chatcontroller.config.Lang;
-import me.pljr.chatcontroller.objects.CorePlayer;
-import me.pljr.pljrapispigot.utils.CommandUtil;
+import me.pljr.chatcontroller.managers.PlayerManager;
+import me.pljr.chatcontroller.objects.ChatPlayer;
+import me.pljr.pljrapispigot.commands.BukkitCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -11,10 +12,13 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-public class MsgIgnoreCommand extends CommandUtil {
+public class MsgIgnoreCommand extends BukkitCommand {
 
-    public MsgIgnoreCommand(){
+    private final PlayerManager playerManager;
+
+    public MsgIgnoreCommand(PlayerManager playerManager){
         super("msgignore", "chatcontroller.msgignore.use");
+        this.playerManager = playerManager;
     }
 
     @Override
@@ -22,33 +26,35 @@ public class MsgIgnoreCommand extends CommandUtil {
         if (args.length == 0){
             // /msgignore
             if (!checkPerm(player, "chatcontroller.msgignore.use.fullignore")) return;
-            CorePlayer corePlayer = ChatController.getPlayerManager().getCorePlayer(player.getUniqueId());
-            if (corePlayer.isIgnoring()){
-                sendMessage(player, Lang.MSGIGNORE_SUCCESS_FULLIGNORE_OFF.get());
-                corePlayer.setIgnoring(false);
-            }else{
-                sendMessage(player, Lang.MSGIGNORE_SUCCESS_FULLIGNORE_ON.get());
-                corePlayer.setIgnoring(true);
-            }
-            ChatController.getPlayerManager().setCorePlayer(player.getUniqueId(), corePlayer);
+            playerManager.getPlayer(player.getUniqueId(), chatPlayer -> {
+                if (chatPlayer.isIgnoring()){
+                    sendMessage(player, Lang.MSGIGNORE_SUCCESS_FULLIGNORE_OFF.get());
+                    chatPlayer.setIgnoring(false);
+                }else{
+                    sendMessage(player, Lang.MSGIGNORE_SUCCESS_FULLIGNORE_ON.get());
+                    chatPlayer.setIgnoring(true);
+                }
+                playerManager.setPlayer(player.getUniqueId(), chatPlayer);
+            });
             return;
         }
 
         else if (args.length == 1){
             // /msgignore <player>
             if (!checkPerm(player, "chatcontroller.msgignore.use.player")) return;
-            CorePlayer corePlayer = ChatController.getPlayerManager().getCorePlayer(player.getUniqueId());
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
-            List<UUID> ignoreList = corePlayer.getIgnoreList();
-            if (ignoreList.contains(offlinePlayer.getUniqueId())){
-                sendMessage(player, Lang.MSGIGNORE_SUCCESS_UNIGNORE.get().replace("{player}", args[0]));
-                ignoreList.remove(offlinePlayer.getUniqueId());
-            }else{
-                sendMessage(player, Lang.MSGIGNORE_SUCCESS_IGNORE.get().replace("{player}", args[0]));
-                ignoreList.add(offlinePlayer.getUniqueId());
-            }
-            corePlayer.setIgnoreList(ignoreList);
-            ChatController.getPlayerManager().setCorePlayer(player.getUniqueId(), corePlayer);
+            playerManager.getPlayer(player.getUniqueId(), chatPlayer -> {
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
+                List<UUID> ignoreList = chatPlayer.getIgnoreList();
+                if (ignoreList.contains(offlinePlayer.getUniqueId())){
+                    sendMessage(player, Lang.MSGIGNORE_SUCCESS_UNIGNORE.get().replace("{player}", args[0]));
+                    ignoreList.remove(offlinePlayer.getUniqueId());
+                }else{
+                    sendMessage(player, Lang.MSGIGNORE_SUCCESS_IGNORE.get().replace("{player}", args[0]));
+                    ignoreList.add(offlinePlayer.getUniqueId());
+                }
+                chatPlayer.setIgnoreList(ignoreList);
+                playerManager.setPlayer(player.getUniqueId(), chatPlayer);
+            });
             return;
         }
 

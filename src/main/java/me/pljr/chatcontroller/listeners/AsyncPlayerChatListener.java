@@ -1,11 +1,10 @@
 package me.pljr.chatcontroller.listeners;
 
-import me.pljr.chatcontroller.config.CfgGroups;
-import me.pljr.chatcontroller.config.CfgSettings;
-import me.pljr.chatcontroller.config.Lang;
-import me.pljr.chatcontroller.utils.MentionUtil;
+import lombok.AllArgsConstructor;
+import me.pljr.chatcontroller.config.*;
+import me.pljr.pljrapispigot.builders.ActionBarBuilder;
+import me.pljr.pljrapispigot.builders.TitleBuilder;
 import me.pljr.pljrapispigot.utils.ChatUtil;
-import me.pljr.pljrapispigot.utils.MiniMessageUtil;
 import me.pljr.pljrapispigot.utils.PapiUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,36 +12,48 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+@AllArgsConstructor
 public class AsyncPlayerChatListener implements Listener {
+
+    private final Groups groups;
+    private final Settings settings;
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event){
         Player player = event.getPlayer();
-        for (String group : CfgGroups.GROUP_NAMES){
+        for (String group : groups.getGroupNames()){
             if (player.hasPermission("chatcontroller.groups."+group)){
                 event.setCancelled(true);
                 String message = event.getMessage();
                 String playerName = player.getName();
 
                 // AdminChat
-                if (message.startsWith(CfgSettings.ADMIN_CHAT)){
+                if (message.startsWith(settings.getAdminChat())){
                     if (player.hasPermission("chatcontroler.adminchat.use")){
-                        ChatUtil.broadcast(PapiUtil.setPlaceholders(player, Lang.ADMIN_CHAT_FORMAT.get().replace("{player}", playerName).replace("{message}", MiniMessageUtil.strip(message.substring(1)))),
-                                "chatcontroller.adminchat.see", CfgSettings.BUNGEE);
+                        ChatUtil.broadcast(PapiUtil.setPlaceholders(player, Lang.ADMIN_CHAT_FORMAT.get().replace("{player}", playerName).replace("{message}", message.substring(1))),
+                                "chatcontroller.adminchat.see", settings.isBungee());
                         break;
                     }
                 }
 
                 // Chat
                 ChatUtil.broadcast(PapiUtil.setPlaceholders(player,
-                        CfgGroups.GROUPS.get(group)
-                                .replace("{player}", CfgGroups.getPlayerPlaceholder(player))
-                                .replace("{message}", MiniMessageUtil.strip(message))), "", CfgSettings.BUNGEE);
+                        groups.getGroups().get(group)
+                                .replace("{player}", groups.getPlayerPlaceholder(player))
+                                .replace("{message}", message)), "", settings.isBungee());
 
                 // Mention
                 for (Player bukkitPlayer : Bukkit.getOnlinePlayers()){
                     if (message.contains(bukkitPlayer.getName())){
-                        MentionUtil.mention(bukkitPlayer, playerName);
+                        if (settings.isMentionMessage()) ChatUtil.sendMessage(bukkitPlayer, Lang.MENTION_MESSAGE.get().replace("{player}", playerName));
+                        if (settings.isMentionTitle()) new TitleBuilder(TitleType.MENTION_TITLE.get())
+                                .replaceTitle("{player}", playerName)
+                                .replaceSubtitle("{player}", playerName)
+                                .create().send(bukkitPlayer);
+                        if (settings.isMentionActionbar()) new ActionBarBuilder(ActionBarType.MENTION_ACTIONBAR.get())
+                                .replaceMessage("{player}", playerName)
+                                .create().send(bukkitPlayer);
+                        if (settings.isSounds()) SoundType.PRIVATE_MESSAGE.get().play(bukkitPlayer);
                     }
                 }
                 break;

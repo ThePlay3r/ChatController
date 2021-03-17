@@ -24,18 +24,15 @@ public enum SoundType {
         FileConfiguration fileConfig = config.getConfig();
         for (SoundType soundType : SoundType.values()){
             if (!fileConfig.isSet(soundType.toString())){
-                config.setPLJRSound(soundType.toString(), soundType.getDefault());
+                config.setPLJRSound(soundType.toString(), soundType.defaultValue);
+            }else{
+                sounds.put(soundType, config.getPLJRSound(soundType.toString()));
             }
-            sounds.put(soundType, config.getPLJRSound(soundType.toString()));
         }
         config.save();
     }
 
     public PLJRSound get(){
-        return sounds.get(this);
-    }
-
-    public PLJRSound getDefault(){
-        return this.defaultValue;
+        return sounds.getOrDefault(this, defaultValue);
     }
 }

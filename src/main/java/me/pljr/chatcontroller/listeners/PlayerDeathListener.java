@@ -1,7 +1,8 @@
 package me.pljr.chatcontroller.listeners;
 
-import me.pljr.chatcontroller.config.CfgDeathMessages;
-import me.pljr.chatcontroller.config.CfgSettings;
+import lombok.AllArgsConstructor;
+import me.pljr.chatcontroller.config.DeathMessages;
+import me.pljr.chatcontroller.config.Settings;
 import me.pljr.pljrapispigot.utils.ChatUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +13,11 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import java.util.List;
 import java.util.Random;
 
+@AllArgsConstructor
 public class PlayerDeathListener implements Listener {
+
+    private final DeathMessages deathMessages;
+    private final Settings settings;
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
@@ -29,16 +34,16 @@ public class PlayerDeathListener implements Listener {
             Player killer = player.getKiller();
             String killerName = killer.getName();
 
-            List<String> messages = CfgDeathMessages.PLAYER;
+            List<String> messages = deathMessages.getPlayer();
             message = messages.get(new Random().nextInt(messages.size())).replace("{attacker}", killerName).replace("{victim}", playerName);
-        }else if (CfgDeathMessages.MESSAGES.containsKey(cause)){
-            List<String> messages = CfgDeathMessages.MESSAGES.get(cause);
+        }else if (deathMessages.getMessages().containsKey(cause)){
+            List<String> messages = deathMessages.getMessages().get(cause);
             message = messages.get(new Random().nextInt(messages.size())).replace("{victim}", playerName);
         }
 
         if (message != null){
             event.setDeathMessage(null);
-            ChatUtil.broadcast(message, "", CfgSettings.BUNGEE);
+            ChatUtil.broadcast(message, "", settings.isBungee());
         }
     }
 }

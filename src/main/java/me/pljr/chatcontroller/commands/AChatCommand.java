@@ -1,24 +1,27 @@
 package me.pljr.chatcontroller.commands;
 
-import me.pljr.chatcontroller.config.CfgSettings;
+import me.pljr.chatcontroller.config.Settings;
 import me.pljr.chatcontroller.config.Lang;
+import me.pljr.pljrapispigot.commands.BukkitCommand;
 import me.pljr.pljrapispigot.utils.ChatUtil;
-import me.pljr.pljrapispigot.utils.CommandUtil;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class AChatCommand extends CommandUtil {
+public class AChatCommand extends BukkitCommand {
 
-    public AChatCommand(){
+    private final Settings settings;
+
+    public AChatCommand(Settings settings){
         super("achat", "chatcontroller.adminchat.use");
+        this.settings = settings;
     }
 
     @Override
     public void onPlayerCommand(Player player, String[] args){
         if (args.length > 0){
-            ChatUtil.broadcast(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " "), "chatcontroller.adminchat.see", CfgSettings.BUNGEE);
+            ChatUtil.broadcast(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " "), "chatcontroller.adminchat.see", settings.isBungee());
             return;
         }
 
@@ -30,7 +33,7 @@ public class AChatCommand extends CommandUtil {
     @Override
     public void onConsoleCommand(ConsoleCommandSender sender, String[] args){
         if (args.length > 0){
-            ChatUtil.broadcast(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " "), "chatcontroller.adminchat.see", CfgSettings.BUNGEE);
+            ChatUtil.broadcast(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " "), "chatcontroller.adminchat.see", settings.isBungee());
             return;
         }
 
