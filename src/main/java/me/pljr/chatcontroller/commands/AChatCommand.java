@@ -10,6 +10,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class AChatCommand extends BukkitCommand {
+    private static final String PERM = "chatcontroller.adminchat.see";
 
     private final Settings settings;
 
@@ -18,10 +19,16 @@ public class AChatCommand extends BukkitCommand {
         this.settings = settings;
     }
 
+    private void execute(String name, String[] args){
+        String message = StringUtils.join(ArrayUtils.subarray(args, 0, args.length), " ");
+        ChatUtil.broadcast(Lang.ADMIN_CHAT_FORMAT.get().replace("{player}", name).replace("{message}", message), PERM, settings.isBungeeAChat());
+    }
+
+
     @Override
     public void onPlayerCommand(Player player, String[] args){
         if (args.length > 0){
-            ChatUtil.broadcast(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " "), "chatcontroller.adminchat.see", settings.isBungee());
+            execute(player.getName(), args);
             return;
         }
 
@@ -33,7 +40,7 @@ public class AChatCommand extends BukkitCommand {
     @Override
     public void onConsoleCommand(ConsoleCommandSender sender, String[] args){
         if (args.length > 0){
-            ChatUtil.broadcast(StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " "), "chatcontroller.adminchat.see", settings.isBungee());
+            execute("Console", args);
             return;
         }
 

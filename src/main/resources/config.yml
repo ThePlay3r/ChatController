@@ -28,6 +28,7 @@ mysql:
                  #############################################################  \
 settings:
   bungee: false #-> Should we use bungee functions?
+  bungee-admin-chat: false #-> Should admin-chat be bungee?
   admin-chat: "#" #-> What should we look for, when trying to send AdminChat message?
   sounds: true #-> Should we use sounds?
   broadcast: 600 #-> How often should broadcasts happen?

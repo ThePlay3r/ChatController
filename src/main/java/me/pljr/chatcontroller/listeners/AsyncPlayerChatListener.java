@@ -30,8 +30,7 @@ public class AsyncPlayerChatListener implements Listener {
                 // AdminChat
                 if (message.startsWith(settings.getAdminChat())){
                     if (player.hasPermission("chatcontroler.adminchat.use")){
-                        ChatUtil.broadcast(PapiUtil.setPlaceholders(player, Lang.ADMIN_CHAT_FORMAT.get().replace("{player}", playerName).replace("{message}", message.substring(1))),
-                                "chatcontroller.adminchat.see", settings.isBungee());
+                        Bukkit.dispatchCommand(player, "achat " + message.substring(1));
                         break;
                     }
                 }

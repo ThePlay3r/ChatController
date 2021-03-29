@@ -8,6 +8,7 @@ public class Settings {
     private final static String PATH = "settings";
 
     private final boolean bungee;
+    private final boolean bungeeAChat;
     private final String adminChat;
     private final boolean sounds;
     private final int broadcast;
@@ -21,6 +22,7 @@ public class Settings {
 
     public Settings(ConfigManager config){
         bungee = config.getBoolean(PATH+".bungee");
+        bungeeAChat = config.getBoolean(PATH+".bungee-admin-chat");
         adminChat = config.getString(PATH+".admin-chat");
         sounds = config.getBoolean(PATH+".sounds");
         broadcast = config.getInt(PATH+".broadcast");
